@@ -29,9 +29,10 @@ const connectDB = async () => {
     await client.query('SELECT NOW()');
     client.release();
     logger.info('資料庫連接測試成功');
+    return true;
   } catch (err) {
-    logger.error('資料庫連接失敗:', err);
-    process.exit(1);
+    logger.warn('資料庫連接失敗，將在無資料庫模式下運行:', err.message);
+    return false;
   }
 };
 

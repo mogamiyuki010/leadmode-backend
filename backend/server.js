@@ -13,11 +13,17 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // 連接資料庫（可選，如果資料庫不可用則跳過）
-try {
-  connectDB();
-} catch (error) {
+let dbConnected = false;
+connectDB().then(connected => {
+  dbConnected = connected;
+  if (connected) {
+    logger.info('資料庫已連接');
+  } else {
+    logger.warn('資料庫未連接，部分功能可能不可用');
+  }
+}).catch(error => {
   logger.warn('資料庫連接失敗，將在無資料庫模式下運行:', error.message);
-}
+});
 
 // 安全中間件
 app.use(helmet());
