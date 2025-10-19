@@ -12,8 +12,12 @@ const { logger } = require('./config/logger');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// 連接資料庫
-connectDB();
+// 連接資料庫（可選，如果資料庫不可用則跳過）
+try {
+  connectDB();
+} catch (error) {
+  logger.warn('資料庫連接失敗，將在無資料庫模式下運行:', error.message);
+}
 
 // 安全中間件
 app.use(helmet());
